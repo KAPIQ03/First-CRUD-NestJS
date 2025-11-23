@@ -13,24 +13,22 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
-  // get one 
-  async findOne(id: number): Promise<User | null>{
-    return await this.usersRepository.findOne({ where: {id} });
+  // get one
+  async findOne(id: number): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { id } });
   }
   // create
-  async create(user:User): Promise<User> {
+  async create(user: User): Promise<User> {
     const newUser = this.usersRepository.create(user);
     return await this.usersRepository.save(newUser);
   }
-  // update 
-  async update(id: number, user: User): Promise<User> {
-    const existingUser = await this.usersRepository.findOne({ where: {id} });
-    if (!existingUser) {
-      throw new Error('User not found');
-    }
-    this.usersRepository.merge(existingUser, user);
-    return await this.usersRepository.save(existingUser);
+  // update
+  async update(id: number, user: User): Promise<User | null> {
+    await this.usersRepository.update(id, user);
+    return await this.usersRepository.findOne({ where: { id } });
   }
   //delete
-
+  async delete(id: number): Promise<void> {
+    await this.usersRepository.delete(id);
+  }
 }
